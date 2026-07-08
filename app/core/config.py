@@ -6,7 +6,6 @@ file in local development) so that the exact same container image can be
 promoted from staging to production without being rebuilt.
 """
 from functools import lru_cache
-from typing import List
 
 from pydantic import AnyUrl, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -48,7 +47,7 @@ class Settings(BaseSettings):
     CELERY_RESULT_BACKEND: str = Field(default="redis://localhost:6379/2")
 
     # --- CORS ------------------------------------------------------------------
-    CORS_ORIGINS: List[str] = Field(default_factory=lambda: ["http://localhost:3000"])
+    CORS_ORIGINS: list[str] = Field(default_factory=lambda: ["http://localhost:3000"])
 
     # --- GPU / Provider infrastructure ------------------------------------------
     RUNPOD_API_KEY: str = Field(default="")

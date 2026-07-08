@@ -29,4 +29,6 @@ class TenantScopedMixin:
 
     @staticmethod
     def organization_fk():
-        return mapped_column(GUID(), ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False, index=True)
+        return mapped_column(
+            GUID(), ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False, index=True
+        )

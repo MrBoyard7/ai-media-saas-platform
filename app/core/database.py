@@ -7,8 +7,8 @@ migrations simple while still allowing a move to schema- or
 database-per-tenant later for large enterprise customers, since the
 repository layer is the only place that knows about this decision.
 """
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import AsyncIterator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
