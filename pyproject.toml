@@ -1,0 +1,45 @@
+[project]
+name = "ai-media-saas-platform"
+version = "1.0.0"
+description = "Enterprise-grade, multi-tenant, white-label AI SaaS platform for lyrics, music, voice and video generation."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [{ name = "Prince Boyard MBOUNGOU NGOMA" }]
+
+[tool.black]
+line-length = 110
+target-version = ["py39", "py310", "py311", "py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 110
+known_first_party = ["app"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["B008"]  # FastAPI's Depends(...) in function defaults is intentional
+
+[tool.mypy]
+python_version = "3.9"
+ignore_missing_imports = true
+disallow_untyped_defs = false
+warn_unused_ignores = true
+exclude = ["tests/", "migrations/"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+
+[tool.coverage.run]
+source = ["app"]
+omit = ["app/main.py", "*/tests/*"]
+
+[tool.coverage.report]
+exclude_lines = ["pragma: no cover", "if TYPE_CHECKING:", "raise NotImplementedError"]
+fail_under = 80
