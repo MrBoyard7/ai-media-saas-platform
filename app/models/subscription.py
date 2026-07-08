@@ -14,7 +14,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
 from app.models.base import TimestampMixin, UUIDPrimaryKeyMixin
-from app.models.organization import OrganizationPlan
+from app.models.organization import Organization, OrganizationPlan
 from app.models.types import GUID, StrEnum
 
 

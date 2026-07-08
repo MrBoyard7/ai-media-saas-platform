@@ -1,5 +1,6 @@
 """Organization = tenant. Every other resource in the platform is scoped to one."""
 import enum
+from typing import TYPE_CHECKING
 import uuid
 
 from sqlalchemy import ForeignKey, String, UniqueConstraint
@@ -8,6 +9,16 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import Base
 from app.models.base import TimestampMixin, UUIDPrimaryKeyMixin
 from app.models.types import GUID, PortableJSON, StrEnum
+
+if TYPE_CHECKING:
+    # Import-time-only: Organization, Wallet and Subscription reference each
+    # other, so a real (non-guarded) import here would be circular. The
+    # string forward references below (`Mapped["Wallet"]`) are what
+    # SQLAlchemy actually resolves at runtime, via its mapper registry --
+    # this block exists purely so mypy/ruff can resolve those same strings
+    # statically instead of flagging them as undefined names.
+    from app.models.subscription import Subscription
+    from app.models.wallet import Wallet
 
 
 class OrganizationPlan(str, enum.Enum):

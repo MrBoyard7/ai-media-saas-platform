@@ -3,6 +3,7 @@ organization has, and a fully auditable, append-only ledger of every
 movement (top-up, generation debit, refund, promotional grant)."""
 import enum
 import uuid
+from typing import TYPE_CHECKING
 
 from sqlalchemy import BigInteger, ForeignKey, Index, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -10,6 +11,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import Base
 from app.models.base import TimestampMixin, UUIDPrimaryKeyMixin
 from app.models.types import GUID, PortableJSON, StrEnum
+
+if TYPE_CHECKING:
+    from app.models.organization import Organization
 
 
 class TransactionType(str, enum.Enum):
