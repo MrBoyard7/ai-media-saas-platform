@@ -15,6 +15,7 @@ from fastapi.responses import JSONResponse
 
 from app.api.v1.router import api_router
 from app.core.config import get_settings
+from app.core.database import AsyncSessionLocal
 from app.core.exceptions import DomainError
 from app.core.logging import configure_logging
 from app.middleware.tenant import TenantResolutionMiddleware
@@ -48,6 +49,13 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
     app.add_middleware(TenantResolutionMiddleware)
+
+    # Starlette middleware runs outside FastAPI's `Depends` system, so it
+    # cannot use `get_db`. It instead opens its own short-lived session via
+    # `request.app.state.db_sessionmaker`, which tests override to point at
+    # the in-memory test database (see tests/conftest.py) instead of the
+    # production Postgres engine.
+    app.state.db_sessionmaker = AsyncSessionLocal
 
     @app.exception_handler(DomainError)
     async def domain_error_handler(request: Request, exc: DomainError) -> JSONResponse:

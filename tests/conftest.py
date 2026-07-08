@@ -21,18 +21,23 @@ from sqlalchemy.pool import StaticPool
 from app.core.database import Base, get_db
 from app.core.security import AuthContext, get_current_auth_context
 from app.main import app
-from app.models.organization import Organization
+from app.models.organization import Organization, OrganizationPlan
 from app.models.subscription import Feature, PlanFeature, Subscription, SubscriptionStatus
-from app.models.organization import OrganizationPlan
 from app.models.wallet import Wallet
 
 
 @pytest_asyncio.fixture
-async def db_session() -> AsyncIterator[AsyncSession]:
-    # `poolclass=StaticPool` is required for an in-memory SQLite database in
-    # tests: without it, every new connection checkout gets its own separate
-    # (and empty) `:memory:` database, so the schema created below would be
-    # invisible to the session that queries it a few lines later.
+async def session_factory():
+    """An `async_sessionmaker` bound to a fresh in-memory SQLite database.
+
+    `poolclass=StaticPool` is required for an in-memory SQLite database in
+    tests: without it, every new connection checkout gets its own separate
+    (and empty) `:memory:` database, so the schema created below would be
+    invisible to any session opened after this fixture returns -- including
+    the ad-hoc sessions `TenantResolutionMiddleware` opens per-request (see
+    the `client` fixture below, which points `app.state.db_sessionmaker` at
+    this exact factory).
+    """
     engine = create_async_engine(
         "sqlite+aiosqlite:///:memory:",
         future=True,
@@ -42,11 +47,16 @@ async def db_session() -> AsyncIterator[AsyncSession]:
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
-    session_factory = async_sessionmaker(bind=engine, expire_on_commit=False)
-    async with session_factory() as session:
-        yield session
+    factory = async_sessionmaker(bind=engine, expire_on_commit=False)
+    yield factory
 
     await engine.dispose()
+
+
+@pytest_asyncio.fixture
+async def db_session(session_factory) -> AsyncIterator[AsyncSession]:
+    async with session_factory() as session:
+        yield session
 
 
 @pytest_asyncio.fixture
@@ -72,7 +82,7 @@ async def seeded_organization(db_session: AsyncSession) -> Organization:
 
 
 @pytest_asyncio.fixture
-async def client(db_session: AsyncSession, seeded_organization: Organization) -> AsyncIterator[AsyncClient]:
+async def client(session_factory, db_session: AsyncSession, seeded_organization: Organization) -> AsyncIterator[AsyncClient]:
     """An httpx AsyncClient wired to the FastAPI app, with the DB and auth
     dependencies overridden so no real Postgres or Supabase is required."""
 
@@ -89,6 +99,10 @@ async def client(db_session: AsyncSession, seeded_organization: Organization) ->
 
     app.dependency_overrides[get_db] = _override_get_db
     app.dependency_overrides[get_current_auth_context] = _override_auth
+    # TenantResolutionMiddleware isn't part of FastAPI's Depends graph, so
+    # it can't be overridden via dependency_overrides -- point it at the
+    # same in-memory engine directly (see app/middleware/tenant.py).
+    app.state.db_sessionmaker = session_factory
 
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://testserver") as ac:
@@ -108,4 +122,3 @@ def no_real_celery_broker():
     HTTP layer can be exercised end-to-end without a running Celery stack."""
     with patch("app.api.v1.endpoints.generation.celery_app.send_task") as mock_send_task:
         yield mock_send_task
-
