@@ -12,8 +12,6 @@ from app.providers.lyrics.mock_provider import MockLyricsProvider
 from app.providers.music.audiocraft_provider import AudioCraftMusicProvider
 from app.providers.registry import ProviderRegistry, build_default_registry
 
-pytestmark = pytest.mark.asyncio
-
 
 def _request(capability: Capability, **parameters) -> GenerationRequest:
     return GenerationRequest(
