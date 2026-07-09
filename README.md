@@ -154,6 +154,29 @@ make format         # black . && isort .
 make typecheck      # mypy app
 ```
 
+## Manual smoke testing without Supabase
+
+Every non-health endpoint requires a Supabase-issued JWT. To exercise the
+API by hand (curl, Swagger UI, Postman) before wiring up a real Supabase
+instance, mint a locally-signed test token with the same secret the API
+validates against:
+
+```bash
+python -m scripts.generate_test_jwt
+# user_id:         3f1a...
+# organization_id: 7c2e...
+# role:            owner
+# expires in:      120 minutes
+#
+# eyJhbGciOiJIUzI1NiIs...
+```
+
+Use that token as `Authorization: Bearer <token>` in the example calls
+below, or paste it into Swagger UI's "Authorize" button at
+`http://localhost:8000/docs`. This only works locally: it signs with
+whatever `SUPABASE_JWT_SECRET` is in your `.env`, so it's meaningless
+against a real Supabase-backed deployment using a different secret.
+
 ## Example: calling the API
 
 ```bash
