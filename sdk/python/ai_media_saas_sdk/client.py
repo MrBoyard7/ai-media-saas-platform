@@ -39,7 +39,7 @@ class PlatformClient:
     def close(self) -> None:
         self._http.close()
 
-    def __enter__(self) -> "PlatformClient":
+    def __enter__(self) -> PlatformClient:
         return self
 
     def __exit__(self, *exc_info: Any) -> None:
