@@ -9,7 +9,7 @@ against SQLite here.
 from __future__ import annotations
 
 import uuid
-from typing import AsyncIterator
+from collections.abc import AsyncIterator
 from unittest.mock import patch
 
 import pytest

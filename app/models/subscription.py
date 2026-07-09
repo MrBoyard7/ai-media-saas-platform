@@ -37,7 +37,7 @@ class Subscription(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
     external_billing_id: Mapped[str | None] = mapped_column(String(255), nullable=True)  # Stripe/Paddle subscription id
 
-    organization: Mapped["Organization"] = relationship(back_populates="subscription")
+    organization: Mapped[Organization] = relationship(back_populates="subscription")
 
 
 class Feature(UUIDPrimaryKeyMixin, TimestampMixin, Base):
