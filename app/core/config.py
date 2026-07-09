@@ -7,7 +7,7 @@ promoted from staging to production without being rebuilt.
 """
 from functools import lru_cache
 
-from pydantic import AnyUrl, Field
+from pydantic import AnyUrl, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -53,6 +53,21 @@ class Settings(BaseSettings):
     RUNPOD_API_KEY: str = Field(default="")
     RUNPOD_ENDPOINT_ID: str = Field(default="")
     STORAGE_BUCKET_URL: AnyUrl | None = None
+
+    @field_validator("STORAGE_BUCKET_URL", mode="before")
+    @classmethod
+    def _blank_string_means_unset(cls, value: object) -> object:
+        """`STORAGE_BUCKET_URL=` (blank) in a `.env` file conventionally means
+        "not configured yet" -- but pydantic's `AnyUrl` validator doesn't
+        treat an empty string as `None` on its own, it tries to parse it as
+        a URL and fails. This normalizes blank/whitespace-only values to
+        `None` *before* URL validation runs, so the documented default
+        (leave `STORAGE_BUCKET_URL` empty until you have real object
+        storage configured) actually works instead of crashing the app on
+        startup."""
+        if isinstance(value, str) and value.strip() == "":
+            return None
+        return value
 
     # --- Credits -----------------------------------------------------------------
     DEFAULT_SIGNUP_CREDITS: int = 100
