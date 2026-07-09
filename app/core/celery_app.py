@@ -28,6 +28,11 @@ celery_app.conf.update(
     task_track_started=True,
     task_acks_late=True,
     worker_prefetch_multiplier=1,  # fair dispatch across GPU workers
+    # Explicit rather than relying on the (soon-to-change) default: keep
+    # retrying the broker connection on worker startup rather than failing
+    # fast, since `docker compose up` frequently starts the worker before
+    # Redis has finished its own startup sequence.
+    broker_connection_retry_on_startup=True,
     task_routes={
         "app.workers.tasks.generate_lyrics_task": {"queue": "lyrics"},
         "app.workers.tasks.generate_music_task": {"queue": "gpu.music"},
