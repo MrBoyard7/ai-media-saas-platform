@@ -51,3 +51,20 @@ async def test_enable_white_label_updates_branding(client, seeded_organization):
     body = response.json()
     assert body["is_white_label"] is True
     assert body["custom_domain"] == "studio.novarecords.com"
+
+
+async def test_duplicate_slug_returns_clean_400_not_a_raw_500(client):
+    """Regression test: found via manual end-to-end testing -- any database
+    IntegrityError (unique constraint, foreign key) used to surface as an
+    opaque, undebuggable 500 Internal Server Error. Two organizations with
+    the same name collide on the unique `slug` column, which is a reliable,
+    dialect-agnostic way to trigger the same code path a foreign-key
+    violation would (e.g. a JWT `organization_id` for an org that was never
+    actually created)."""
+    first = await client.post("/api/v1/organizations", json={"name": "Duplicate Co"})
+    assert first.status_code == 201
+
+    second = await client.post("/api/v1/organizations", json={"name": "Duplicate Co"})
+
+    assert second.status_code == 400
+    assert "detail" in second.json()

@@ -7,11 +7,13 @@ Run locally with:
 Run in a container with:
     uvicorn app.main:app --host 0.0.0.0 --port 8000
 """
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from sqlalchemy.exc import IntegrityError
 
 from app.api.v1.router import api_router
 from app.core.config import get_settings
@@ -60,6 +62,24 @@ def create_app() -> FastAPI:
     @app.exception_handler(DomainError)
     async def domain_error_handler(request: Request, exc: DomainError) -> JSONResponse:
         return JSONResponse(status_code=exc.status_code, content={"detail": exc.message})
+
+    @app.exception_handler(IntegrityError)
+    async def integrity_error_handler(request: Request, exc: IntegrityError) -> JSONResponse:
+        """Most commonly a foreign key pointing at a row that doesn't exist
+        -- e.g. an `organization_id` claim in a JWT for an organization that
+        was never actually created. Without this handler such requests
+        surface as an opaque, undebuggable 500 Internal Server Error; the
+        real cause is still logged server-side for diagnosis."""
+        logging.getLogger("app.database").error("Database integrity error on %s: %s", request.url.path, exc)
+        return JSONResponse(
+            status_code=400,
+            content={
+                "detail": (
+                    "The request references a resource that doesn't exist or conflicts with "
+                    "an existing one (e.g. an organization_id that was never created)."
+                )
+            },
+        )
 
     app.include_router(api_router, prefix=settings.API_V1_PREFIX)
     return app
