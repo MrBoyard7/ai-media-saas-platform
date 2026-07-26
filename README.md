@@ -126,8 +126,13 @@ make install
 cp .env.example .env               # point DATABASE_URL / REDIS_URL at local services
 
 uvicorn app.main:app --reload      # API
-celery -A app.core.celery_app.celery_app worker --loglevel=info   # worker, separate terminal
+celery -A app.core.celery_app.celery_app worker --loglevel=info \
+  -Q lyrics,gpu.music,gpu.voice,gpu.video    # worker, separate terminal
 ```
+
+The `-Q` flag matters: task routing (`app/core/celery_app.py`) sends each
+capability to its own queue, so a worker started without it only listens
+to Celery's default queue and silently never picks up any job.
 
 ## Testing
 
@@ -196,7 +201,7 @@ curl -X POST http://localhost:8000/api/v1/generate \
       }'
 ```
 
-Or with the Python SDK:
+Or with the Python SDK ([full SDK docs](sdk/python/README.md)):
 
 ```python
 from ai_media_saas_sdk import PlatformClient
@@ -223,10 +228,14 @@ with PlatformClient(api_key="sk_live_...", base_url="http://localhost:8000/api/v
 ## Roadmap
 
 - [ ] Postgres Row-Level Security policies as defense-in-depth for
-      multi-tenancy (see ADR 0002)
+      multi-tenancy (see [ADR 0002](docs/adr/0002-multi-tenancy-strategy.md))
 - [ ] TypeScript SDK generated from the OpenAPI schema
 - [ ] Usage-based rate limiting per `plan_features.monthly_limit`
 - [ ] Real GPU worker deployment scripts for RunPod serverless
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Contributing
 
