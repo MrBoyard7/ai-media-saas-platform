@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import enum
 import uuid
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from sqlalchemy import BigInteger, ForeignKey, Index, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -66,7 +66,7 @@ class CreditTransaction(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     type: Mapped[TransactionType] = mapped_column(
         StrEnum(TransactionType, name="transaction_type"), nullable=False
     )
-    reference: Mapped[str | None] = mapped_column(String(255), nullable=True)  # e.g. job_id, invoice_id
+    reference: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)  # e.g. job_id, invoice_id
     idempotency_key: Mapped[str] = mapped_column(String(255), nullable=False)
     metadata_: Mapped[dict] = mapped_column("metadata", PortableJSON(), default=dict, nullable=False)
 

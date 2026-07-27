@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import enum
 import uuid
+from typing import Optional
 
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
@@ -48,8 +49,8 @@ class GenerationJob(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
 
     input_payload: Mapped[dict] = mapped_column(PortableJSON(), nullable=False)
-    output_payload: Mapped[dict | None] = mapped_column(PortableJSON(), nullable=True)
-    error_message: Mapped[str | None] = mapped_column(String(2000), nullable=True)
+    output_payload: Mapped[Optional[dict]] = mapped_column(PortableJSON(), nullable=True)
+    error_message: Mapped[Optional[str]] = mapped_column(String(2000), nullable=True)
 
     credits_reserved: Mapped[int] = mapped_column(default=0, nullable=False)
-    celery_task_id: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
+    celery_task_id: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)

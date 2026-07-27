@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import enum
 import uuid
+from typing import Optional
 
 from sqlalchemy import BigInteger, Boolean, ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -40,7 +41,7 @@ class Subscription(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     status: Mapped[SubscriptionStatus] = mapped_column(
         StrEnum(SubscriptionStatus, name="subscription_status"), default=SubscriptionStatus.TRIALING
     )
-    external_billing_id: Mapped[str | None] = mapped_column(
+    external_billing_id: Mapped[Optional[str]] = mapped_column(
         String(255), nullable=True
     )  # Stripe/Paddle subscription id
 
@@ -71,6 +72,6 @@ class PlanFeature(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         GUID(), ForeignKey("features.id", ondelete="CASCADE"), nullable=False
     )
     enabled: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
-    monthly_limit: Mapped[int | None] = mapped_column(BigInteger, nullable=True)  # None == unlimited
+    monthly_limit: Mapped[Optional[int]] = mapped_column(BigInteger, nullable=True)  # None == unlimited
 
     feature: Mapped["Feature"] = relationship()

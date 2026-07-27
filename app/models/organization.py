@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import enum
 import uuid
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from sqlalchemy import ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -52,7 +52,7 @@ class Organization(UUIDPrimaryKeyMixin, TimestampMixin, Base):
 
     # --- White-label configuration -----------------------------------------
     is_white_label: Mapped[bool] = mapped_column(default=False, nullable=False)
-    custom_domain: Mapped[str | None] = mapped_column(String(255), unique=True, nullable=True)
+    custom_domain: Mapped[Optional[str]] = mapped_column(String(255), unique=True, nullable=True)
     branding: Mapped[dict] = mapped_column(PortableJSON(), default=dict, nullable=False)
     # e.g. {"logo_url": "...", "primary_color": "#111827", "product_name": "Acme Studio"}
 

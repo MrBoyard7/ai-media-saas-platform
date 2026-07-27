@@ -24,14 +24,18 @@ target-version = "py39"
 select = ["E", "F", "I", "UP", "B", "SIM"]
 ignore = [
     "B008",   # FastAPI's Depends(...) in function defaults is intentional
-    "UP037",  # Don't strip quotes from Mapped["X"] forward refs: several of them
-              # (app/models/{organization,wallet}.py) point at classes only
-              # importable under TYPE_CHECKING to avoid a circular import between
-              # model files. SQLAlchemy resolves those quoted strings via its own
-              # mapper registry; whether it does the same for the bare name once
-              # `from __future__ import annotations` makes it "unquoted" too is not
-              # worth gambling on without being able to run SQLAlchemy to verify.
 ]
+
+[tool.ruff.lint.per-file-ignores]
+# SQLAlchemy's Mapped[] annotation resolver is a separate mechanism from
+# Pydantic's (unaffected by eval_type_backport) and, confirmed via a real
+# CI failure on Python 3.9, cannot evaluate either a quoted forward
+# reference stripped of its quotes (UP037) or PEP 604 'X | None' syntax
+# (UP007) -- it needs Optional[X] and, for cross-file relationships,
+# actual quoted strings ("Wallet") resolved through its own mapper
+# registry. Scoped to app/models/ only so these rules stay active (and
+# useful) everywhere else in the codebase.
+"app/models/*.py" = ["UP037", "UP007"]
 
 [tool.mypy]
 python_version = "3.11"
