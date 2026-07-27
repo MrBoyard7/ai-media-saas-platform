@@ -6,6 +6,7 @@ Python functions rather than through a running app -- they're ordinary
 `async def`s under FastAPI's `Depends()` sugar, so nothing but pytest is
 needed to exercise them.
 """
+
 from __future__ import annotations
 
 import jwt
@@ -104,7 +105,9 @@ async def test_get_current_auth_context_rejects_token_without_any_tenant_claim()
 
 @pytest.mark.asyncio
 async def test_require_scopes_passes_when_all_scopes_present():
-    token = _sign_supabase_token(sub="user-1", organization_id="org-1", scopes=["generation:write", "credits:read"])
+    token = _sign_supabase_token(
+        sub="user-1", organization_id="org-1", scopes=["generation:write", "credits:read"]
+    )
     ctx = await get_current_auth_context(credentials=_bearer(token))
 
     checker = require_scopes("generation:write")

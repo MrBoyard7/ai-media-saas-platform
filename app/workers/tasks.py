@@ -11,6 +11,7 @@ In production these tasks are consumed by GPU-backed Celery workers
 GPU instances, while the lightweight `lyrics` queue can run on plain CPU
 workers alongside the API.
 """
+
 from __future__ import annotations
 
 import asyncio

@@ -8,6 +8,7 @@ dependencies, and SQLite has no native UUID or JSONB type. `GUID` and
 `PortableJSON` pick the right implementation per-dialect at column-compile
 time, so the exact same model definitions work unmodified against both.
 """
+
 from __future__ import annotations
 
 import enum
@@ -70,4 +71,3 @@ def StrEnum(enum_cls: type[enum.Enum], *, name: str) -> Enum:
     `StrEnum(MyEnum, name="my_enum")` instead of repeating this argument.
     """
     return Enum(enum_cls, name=name, values_callable=lambda obj: [member.value for member in obj])
-

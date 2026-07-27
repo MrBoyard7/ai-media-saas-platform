@@ -1,4 +1,5 @@
 """AI Generation API: the single entry point for lyrics, music, voice and video jobs."""
+
 from __future__ import annotations
 
 import uuid

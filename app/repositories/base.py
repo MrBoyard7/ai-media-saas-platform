@@ -5,6 +5,7 @@ The Repository pattern isolates every SQLAlchemy query in one layer so that
 `tests/unit/*` test business rules with a trivial in-memory fake instead of
 spinning up Postgres for every test.
 """
+
 from __future__ import annotations
 
 import uuid

@@ -8,6 +8,7 @@ swapping in a hosted or self-hosted language model is purely additive: copy
 this file, replace `_compose` with a real model call, and register the new
 class in `app.providers.registry`.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -39,13 +40,18 @@ class MockLyricsProvider(AIProviderAdapter):
         await asyncio.sleep(min(0.05 * target_lines, 1.0))
 
         digest = hashlib.sha256(f"{request.prompt}:{request.job_id}".encode()).hexdigest()[:12]
-        output_url = f"https://storage.example.com/lyrics/{request.organization_id}/{request.job_id}-{digest}.txt"
+        output_url = (
+            f"https://storage.example.com/lyrics/{request.organization_id}/{request.job_id}-{digest}.txt"
+        )
 
         return GenerationResult(
             output_url=output_url,
             provider_name=self.name,
             duration_seconds=round(time.monotonic() % 1.0, 3),
-            raw_provider_metadata={"line_count": target_lines, "language": request.parameters.get("language", "en")},
+            raw_provider_metadata={
+                "line_count": target_lines,
+                "language": request.parameters.get("language", "en"),
+            },
         )
 
     def estimate_cost_credits(self, request: GenerationRequest) -> int:

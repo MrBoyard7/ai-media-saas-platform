@@ -13,6 +13,7 @@ If step 3 fails (insufficient credits) no job row is ever created and no
 GPU worker is ever touched -- the platform never spends compute it hasn't
 already been paid for.
 """
+
 from __future__ import annotations
 
 import uuid

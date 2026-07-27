@@ -4,6 +4,7 @@ Keeping exceptions provider- and framework-agnostic in the `services` layer,
 and translating them to HTTP only at the edge (`app.main`), keeps business
 logic reusable from Celery tasks, CLI scripts and tests alike.
 """
+
 from __future__ import annotations
 
 

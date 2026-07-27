@@ -1,4 +1,5 @@
 """Pydantic request/response schemas for the AI Generation API."""
+
 from __future__ import annotations
 
 import uuid
@@ -15,7 +16,9 @@ class GenerationCreateRequest(BaseModel):
     prompt: str = Field(min_length=1, max_length=4000)
     parameters: dict = Field(default_factory=dict)
     reference_asset_url: str | None = None
-    provider_name: str | None = Field(default=None, description="Force a specific provider; omit to use the plan default.")
+    provider_name: str | None = Field(
+        default=None, description="Force a specific provider; omit to use the plan default."
+    )
     idempotency_key: str = Field(min_length=8, max_length=255)
 
 

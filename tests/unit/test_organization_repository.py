@@ -1,14 +1,12 @@
 """Direct unit tests for `OrganizationRepository` / `OrganizationMemberRepository`
 query methods that aren't already exercised indirectly through the service layer."""
+
 from __future__ import annotations
 
 import pytest
 
 from app.models.organization import MemberRole, Organization, OrganizationMember
-from app.repositories.organization_repository import (
-    OrganizationMemberRepository,
-    OrganizationRepository,
-)
+from app.repositories.organization_repository import OrganizationMemberRepository, OrganizationRepository
 
 pytestmark = pytest.mark.asyncio
 

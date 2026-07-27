@@ -1,4 +1,5 @@
 """Organization service: tenant lifecycle and white-label configuration."""
+
 from __future__ import annotations
 
 import re
@@ -7,10 +8,7 @@ import uuid
 from app.core.exceptions import OrganizationNotFoundError
 from app.models.organization import MemberRole, Organization, OrganizationMember
 from app.models.wallet import TransactionType
-from app.repositories.organization_repository import (
-    OrganizationMemberRepository,
-    OrganizationRepository,
-)
+from app.repositories.organization_repository import OrganizationMemberRepository, OrganizationRepository
 from app.services.credits_service import CreditsService
 
 _SLUG_RE = re.compile(r"[^a-z0-9]+")
@@ -59,7 +57,9 @@ class OrganizationService:
             raise OrganizationNotFoundError(f"Organization {organization_id} not found.")
         return organization
 
-    async def enable_white_label(self, organization_id: uuid.UUID, *, custom_domain: str, branding: dict) -> Organization:
+    async def enable_white_label(
+        self, organization_id: uuid.UUID, *, custom_domain: str, branding: dict
+    ) -> Organization:
         organization = await self.get_or_404(organization_id)
         organization.is_white_label = True
         organization.custom_domain = custom_domain

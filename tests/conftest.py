@@ -6,6 +6,7 @@ is what makes this possible (see that module's docstring): the exact same
 model definitions that run on PostgreSQL in production compile cleanly
 against SQLite here.
 """
+
 from __future__ import annotations
 
 import uuid
@@ -68,13 +69,19 @@ async def seeded_organization(db_session: AsyncSession) -> Organization:
     await db_session.flush()
 
     db_session.add(Wallet(organization_id=organization.id, balance=1_000))
-    db_session.add(Subscription(organization_id=organization.id, plan=OrganizationPlan.PRO, status=SubscriptionStatus.ACTIVE))
+    db_session.add(
+        Subscription(
+            organization_id=organization.id, plan=OrganizationPlan.PRO, status=SubscriptionStatus.ACTIVE
+        )
+    )
 
     for key in ("lyrics.generate", "music.generate", "voice.generate", "video.generate"):
         feature = Feature(key=key, name=key, description="")
         db_session.add(feature)
         await db_session.flush()
-        db_session.add(PlanFeature(plan=OrganizationPlan.PRO, feature_id=feature.id, enabled=True, monthly_limit=None))
+        db_session.add(
+            PlanFeature(plan=OrganizationPlan.PRO, feature_id=feature.id, enabled=True, monthly_limit=None)
+        )
 
     await db_session.commit()
     await db_session.refresh(organization)
@@ -82,7 +89,9 @@ async def seeded_organization(db_session: AsyncSession) -> Organization:
 
 
 @pytest_asyncio.fixture
-async def client(session_factory, db_session: AsyncSession, seeded_organization: Organization) -> AsyncIterator[AsyncClient]:
+async def client(
+    session_factory, db_session: AsyncSession, seeded_organization: Organization
+) -> AsyncIterator[AsyncClient]:
     """An httpx AsyncClient wired to the FastAPI app, with the DB and auth
     dependencies overridden so no real Postgres or Supabase is required."""
 

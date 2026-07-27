@@ -5,6 +5,7 @@ sample organization. Safe to run multiple times (idempotent upserts).
 Usage:
     python -m scripts.seed_demo_data
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -60,7 +61,9 @@ async def seed() -> None:
                 select(PlanFeature).where(PlanFeature.plan == plan, PlanFeature.feature_id == feature.id)
             )
             if result.scalar_one_or_none() is None:
-                session.add(PlanFeature(plan=plan, feature_id=feature.id, enabled=True, monthly_limit=monthly_limit))
+                session.add(
+                    PlanFeature(plan=plan, feature_id=feature.id, enabled=True, monthly_limit=monthly_limit)
+                )
 
     print("Seed complete: features and plan entitlements are up to date.")
 

@@ -5,6 +5,7 @@ rather than a fake repository, because the idempotency guarantee is only
 meaningful when it is exercised against the real unique constraint on
 `(wallet_id, idempotency_key)`.
 """
+
 from __future__ import annotations
 
 import uuid

@@ -5,6 +5,7 @@ All runtime configuration is loaded from environment variables (or a `.env`
 file in local development) so that the exact same container image can be
 promoted from staging to production without being rebuilt.
 """
+
 from __future__ import annotations
 
 from functools import lru_cache

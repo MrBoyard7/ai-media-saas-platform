@@ -7,6 +7,7 @@ ever depend on a service (e.g. `CreditsService`), never on a repository or
 the raw DB session, which keeps the HTTP layer thin and the business logic
 independently testable.
 """
+
 from __future__ import annotations
 
 from fastapi import Depends
@@ -14,10 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
 from app.providers.registry import ProviderRegistry, build_default_registry
-from app.repositories.organization_repository import (
-    OrganizationMemberRepository,
-    OrganizationRepository,
-)
+from app.repositories.organization_repository import OrganizationMemberRepository, OrganizationRepository
 from app.repositories.subscription_repository import FeatureRepository, SubscriptionRepository
 from app.repositories.wallet_repository import WalletRepository
 from app.services.credits_service import CreditsService

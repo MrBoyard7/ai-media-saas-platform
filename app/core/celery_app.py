@@ -6,6 +6,7 @@ and GPU-bound, so they are never executed inline on the request/response
 cycle. The API only ever *enqueues* a job and returns a job id; a pool of
 GPU workers (see `app.workers.tasks`) picks the job up asynchronously.
 """
+
 from celery import Celery
 
 from app.core.config import get_settings

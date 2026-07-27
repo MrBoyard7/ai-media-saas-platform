@@ -1,4 +1,5 @@
 """Jobs API: poll the status of an asynchronous generation job."""
+
 from __future__ import annotations
 
 import uuid

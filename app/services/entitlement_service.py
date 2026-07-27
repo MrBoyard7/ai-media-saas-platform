@@ -7,6 +7,7 @@ with the data-driven `plan_features` table. Nothing else in the codebase
 is allowed to special-case a plan name; every gate goes through
 `EntitlementService.check`.
 """
+
 from __future__ import annotations
 
 import uuid

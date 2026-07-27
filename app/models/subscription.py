@@ -6,6 +6,7 @@ are data: a `Feature` is a capability key (e.g. `video.generate`,
 plans include it and with what limits. This lets Sales/Product ship a new
 pricing tier or run an A/B experiment without a deploy.
 """
+
 from __future__ import annotations
 
 import enum
@@ -33,11 +34,15 @@ class Subscription(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     organization_id: Mapped[uuid.UUID] = mapped_column(
         GUID(), ForeignKey("organizations.id", ondelete="CASCADE"), unique=True, nullable=False
     )
-    plan: Mapped[OrganizationPlan] = mapped_column(StrEnum(OrganizationPlan, name="subscription_plan"), nullable=False)
+    plan: Mapped[OrganizationPlan] = mapped_column(
+        StrEnum(OrganizationPlan, name="subscription_plan"), nullable=False
+    )
     status: Mapped[SubscriptionStatus] = mapped_column(
         StrEnum(SubscriptionStatus, name="subscription_status"), default=SubscriptionStatus.TRIALING
     )
-    external_billing_id: Mapped[str | None] = mapped_column(String(255), nullable=True)  # Stripe/Paddle subscription id
+    external_billing_id: Mapped[str | None] = mapped_column(
+        String(255), nullable=True
+    )  # Stripe/Paddle subscription id
 
     organization: Mapped[Organization] = relationship(back_populates="subscription")
 
@@ -59,8 +64,12 @@ class PlanFeature(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     __tablename__ = "plan_features"
     __table_args__ = (UniqueConstraint("plan", "feature_id", name="uq_plan_feature"),)
 
-    plan: Mapped[OrganizationPlan] = mapped_column(StrEnum(OrganizationPlan, name="plan_feature_plan"), nullable=False)
-    feature_id: Mapped[uuid.UUID] = mapped_column(GUID(), ForeignKey("features.id", ondelete="CASCADE"), nullable=False)
+    plan: Mapped[OrganizationPlan] = mapped_column(
+        StrEnum(OrganizationPlan, name="plan_feature_plan"), nullable=False
+    )
+    feature_id: Mapped[uuid.UUID] = mapped_column(
+        GUID(), ForeignKey("features.id", ondelete="CASCADE"), nullable=False
+    )
     enabled: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     monthly_limit: Mapped[int | None] = mapped_column(BigInteger, nullable=True)  # None == unlimited
 

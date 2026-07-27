@@ -1,4 +1,5 @@
 """Shared mixins for every ORM model in the platform."""
+
 import uuid
 from datetime import datetime
 

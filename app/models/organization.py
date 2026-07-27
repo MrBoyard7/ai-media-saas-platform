@@ -1,9 +1,10 @@
 """Organization = tenant. Every other resource in the platform is scoped to one."""
+
 from __future__ import annotations
 
 import enum
-from typing import TYPE_CHECKING
 import uuid
+from typing import TYPE_CHECKING
 
 from sqlalchemy import ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -55,9 +56,15 @@ class Organization(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     branding: Mapped[dict] = mapped_column(PortableJSON(), default=dict, nullable=False)
     # e.g. {"logo_url": "...", "primary_color": "#111827", "product_name": "Acme Studio"}
 
-    members: Mapped[list["OrganizationMember"]] = relationship(back_populates="organization", cascade="all, delete-orphan")
-    wallet: Mapped["Wallet"] = relationship(back_populates="organization", uselist=False, cascade="all, delete-orphan")
-    subscription: Mapped["Subscription"] = relationship(back_populates="organization", uselist=False, cascade="all, delete-orphan")
+    members: Mapped[list["OrganizationMember"]] = relationship(
+        back_populates="organization", cascade="all, delete-orphan"
+    )
+    wallet: Mapped["Wallet"] = relationship(
+        back_populates="organization", uselist=False, cascade="all, delete-orphan"
+    )
+    subscription: Mapped["Subscription"] = relationship(
+        back_populates="organization", uselist=False, cascade="all, delete-orphan"
+    )
 
 
 class OrganizationMember(UUIDPrimaryKeyMixin, TimestampMixin, Base):
@@ -70,6 +77,8 @@ class OrganizationMember(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         GUID(), ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False, index=True
     )
     user_id: Mapped[str] = mapped_column(String(255), nullable=False, index=True)  # Supabase auth.users.id
-    role: Mapped[MemberRole] = mapped_column(StrEnum(MemberRole, name="member_role"), default=MemberRole.MEMBER)
+    role: Mapped[MemberRole] = mapped_column(
+        StrEnum(MemberRole, name="member_role"), default=MemberRole.MEMBER
+    )
 
     organization: Mapped["Organization"] = relationship(back_populates="members")

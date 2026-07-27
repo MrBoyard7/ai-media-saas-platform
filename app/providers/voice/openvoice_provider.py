@@ -9,6 +9,7 @@ retrieval-based voice conversion) are expected to implement this same
 `AIProviderAdapter` contract in production, selected per-request via the
 `provider_name` field on `GenerationJob`.
 """
+
 from __future__ import annotations
 
 import asyncio

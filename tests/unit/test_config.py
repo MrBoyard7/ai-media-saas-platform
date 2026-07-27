@@ -4,6 +4,7 @@
 from the environment/`.env`, which is what makes it practical to unit
 test validation behavior without touching real env vars.
 """
+
 from __future__ import annotations
 
 from app.core.config import Settings

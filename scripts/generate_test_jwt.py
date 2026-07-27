@@ -11,6 +11,7 @@ Usage:
     python -m scripts.generate_test_jwt
     python -m scripts.generate_test_jwt --organization-id <uuid> --role owner
 """
+
 from __future__ import annotations
 
 import argparse

@@ -1,4 +1,5 @@
 """Repository for Subscription, Feature and PlanFeature."""
+
 from __future__ import annotations
 
 import uuid
@@ -14,7 +15,9 @@ class SubscriptionRepository(BaseRepository[Subscription]):
     model = Subscription
 
     async def get_by_organization(self, organization_id: uuid.UUID) -> Subscription | None:
-        result = await self.session.execute(select(Subscription).where(Subscription.organization_id == organization_id))
+        result = await self.session.execute(
+            select(Subscription).where(Subscription.organization_id == organization_id)
+        )
         return result.scalar_one_or_none()
 
 

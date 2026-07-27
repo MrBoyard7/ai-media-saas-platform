@@ -5,6 +5,7 @@ for the database URL instead of hardcoding it in `alembic.ini`, so the
 exact same migration chain runs against local Docker Compose, staging and
 production without editing config files per-environment.
 """
+
 import asyncio
 from logging.config import fileConfig
 

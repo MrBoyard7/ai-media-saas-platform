@@ -1,4 +1,5 @@
 """Organizations API: tenant creation and white-label configuration."""
+
 from __future__ import annotations
 
 import uuid

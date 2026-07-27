@@ -22,7 +22,16 @@ target-version = "py39"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
-ignore = ["B008"]  # FastAPI's Depends(...) in function defaults is intentional
+ignore = [
+    "B008",   # FastAPI's Depends(...) in function defaults is intentional
+    "UP037",  # Don't strip quotes from Mapped["X"] forward refs: several of them
+              # (app/models/{organization,wallet}.py) point at classes only
+              # importable under TYPE_CHECKING to avoid a circular import between
+              # model files. SQLAlchemy resolves those quoted strings via its own
+              # mapper registry; whether it does the same for the bare name once
+              # `from __future__ import annotations` makes it "unquoted" too is not
+              # worth gambling on without being able to run SQLAlchemy to verify.
+]
 
 [tool.mypy]
 python_version = "3.11"

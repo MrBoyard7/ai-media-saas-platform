@@ -5,6 +5,7 @@ immediately) and then updated by a Celery worker as the job moves through
 the GPU pipeline. This table is what powers webhook notifications, the
 user dashboard's "My Generations" view and SDK polling.
 """
+
 from __future__ import annotations
 
 import enum
@@ -42,7 +43,9 @@ class GenerationJob(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     requested_by_user_id: Mapped[str] = mapped_column(String(255), nullable=False)
     kind: Mapped[JobKind] = mapped_column(StrEnum(JobKind, name="job_kind"), nullable=False)
     provider_name: Mapped[str] = mapped_column(String(100), nullable=False)  # e.g. "audiocraft", "openvoice"
-    status: Mapped[JobStatus] = mapped_column(StrEnum(JobStatus, name="job_status"), default=JobStatus.QUEUED, nullable=False)
+    status: Mapped[JobStatus] = mapped_column(
+        StrEnum(JobStatus, name="job_status"), default=JobStatus.QUEUED, nullable=False
+    )
 
     input_payload: Mapped[dict] = mapped_column(PortableJSON(), nullable=False)
     output_payload: Mapped[dict | None] = mapped_column(PortableJSON(), nullable=True)

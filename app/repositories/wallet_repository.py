@@ -12,6 +12,7 @@ the lock is only applied on dialects that actually support it. This keeps
 the exact same repository code correct against both SQLite in tests and
 PostgreSQL in production.
 """
+
 from __future__ import annotations
 
 import uuid

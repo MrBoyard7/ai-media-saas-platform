@@ -16,6 +16,7 @@ short-lived session via `request.app.state.db_sessionmaker` -- a plain
 or overridden in `tests/conftest.py` to point at the in-memory test
 database, so this middleware never has to reach for a hardcoded engine.
 """
+
 from __future__ import annotations
 
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint

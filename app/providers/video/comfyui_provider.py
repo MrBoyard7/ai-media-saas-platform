@@ -8,6 +8,7 @@ requires a running ComfyUI instance with GPU-backed checkpoints. The shape
 below -- `workflow_id` selecting a pre-built ComfyUI graph, async polling
 semantics -- mirrors ComfyUI's real `/prompt` + `/history` API.
 """
+
 from __future__ import annotations
 
 import asyncio

@@ -1,5 +1,6 @@
 """Integration tests for the Organizations endpoints, exercised end-to-end
 through the ASGI app (routing, dependency injection, DB, serialization)."""
+
 from __future__ import annotations
 
 import uuid

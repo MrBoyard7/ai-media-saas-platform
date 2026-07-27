@@ -1,4 +1,5 @@
 """Pydantic request/response schemas for the Organizations API."""
+
 from __future__ import annotations
 
 import uuid

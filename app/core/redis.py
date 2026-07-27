@@ -1,4 +1,5 @@
 """Redis client factory used for caching, rate limiting and distributed locks."""
+
 from functools import lru_cache
 
 from redis.asyncio import Redis

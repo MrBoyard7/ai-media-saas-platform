@@ -2,6 +2,7 @@
 and structured logging setup. `Redis.from_url()` is lazy (no I/O happens
 until a command is actually sent), so these are safe to run with no Redis
 server available."""
+
 from __future__ import annotations
 
 import logging

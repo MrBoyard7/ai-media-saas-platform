@@ -8,6 +8,7 @@ which is what makes the platform "provider independent" and "model
 agnostic": routing a job to a different provider is a configuration change,
 not a code change.
 """
+
 from __future__ import annotations
 
 from app.providers.base import AIProviderAdapter, Capability, ProviderError
@@ -30,8 +31,7 @@ class ProviderRegistry:
         adapters_for_capability = self._adapters.get(capability, {})
         if not provider_name or provider_name not in adapters_for_capability:
             raise ProviderError(
-                f"No adapter registered for capability={capability.value!r} "
-                f"provider={provider_name!r}."
+                f"No adapter registered for capability={capability.value!r} " f"provider={provider_name!r}."
             )
         return adapters_for_capability[provider_name]
 

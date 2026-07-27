@@ -10,6 +10,7 @@ RPC call to the GPU worker pool (see `docs/architecture.md#gpu-workers`),
 typically via RunPod's serverless API. The adapter contract, the retry /
 timeout policy and the cost model below are production-shaped.
 """
+
 from __future__ import annotations
 
 import asyncio

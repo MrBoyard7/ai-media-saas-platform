@@ -10,6 +10,7 @@ open-source model -- means writing one new adapter class and registering
 it in `app.providers.registry`. Nothing in `app.services`, `app.api` or
 `app.workers` ever changes.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field

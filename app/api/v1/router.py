@@ -1,4 +1,5 @@
 """Aggregates every v1 endpoint router into a single APIRouter."""
+
 from fastapi import APIRouter
 
 from app.api.v1.endpoints import credits, generation, health, jobs, organizations, subscriptions

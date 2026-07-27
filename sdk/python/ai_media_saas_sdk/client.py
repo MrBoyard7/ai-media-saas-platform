@@ -13,6 +13,7 @@ This SDK intentionally has zero dependencies beyond `httpx` so it stays
 easy to vendor into customer codebases as part of the Enterprise API
 Platform / Developer Platform offering.
 """
+
 from __future__ import annotations
 
 import uuid
@@ -29,7 +30,9 @@ class PlatformAPIError(Exception):
 
 
 class PlatformClient:
-    def __init__(self, api_key: str, base_url: str = "https://api.yourplatform.com/api/v1", timeout: float = 30.0) -> None:
+    def __init__(
+        self, api_key: str, base_url: str = "https://api.yourplatform.com/api/v1", timeout: float = 30.0
+    ) -> None:
         self._http = httpx.Client(
             base_url=base_url,
             headers={"Authorization": f"Bearer {api_key}"},

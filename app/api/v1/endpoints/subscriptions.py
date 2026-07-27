@@ -1,4 +1,5 @@
 """Subscriptions API: current plan and feature entitlement lookup."""
+
 from __future__ import annotations
 
 import uuid

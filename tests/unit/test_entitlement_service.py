@@ -1,4 +1,5 @@
 """Unit tests for `EntitlementService`."""
+
 from __future__ import annotations
 
 import pytest

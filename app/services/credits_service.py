@@ -6,6 +6,7 @@ wallet, every top-up or subscription renewal credits it, and every single
 movement is idempotent and produces an immutable ledger row. No code path
 outside this service is allowed to mutate `Wallet.balance`.
 """
+
 from __future__ import annotations
 
 import uuid
@@ -86,7 +87,9 @@ class CreditsService:
             wallet = Wallet(organization_id=organization_id, balance=0)
             await self._wallets.add(wallet)
         else:
-            replay = await self._find_replay(wallet, amount=amount, type_=type_, idempotency_key=idempotency_key)
+            replay = await self._find_replay(
+                wallet, amount=amount, type_=type_, idempotency_key=idempotency_key
+            )
             if replay is not None:
                 return replay
 

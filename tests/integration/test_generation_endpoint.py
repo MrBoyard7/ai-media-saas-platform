@@ -1,6 +1,7 @@
 """Integration tests for `POST /generate` and `GET /jobs/{id}`: the full
 credits -> entitlement -> provider -> job pipeline, exercised over HTTP with
 the Celery broker stubbed out (see `no_real_celery_broker` in conftest)."""
+
 from __future__ import annotations
 
 import uuid

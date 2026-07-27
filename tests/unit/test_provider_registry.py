@@ -3,6 +3,7 @@
 These tests need no database and no network: the registry and every
 reference adapter are pure, dependency-free Python.
 """
+
 from __future__ import annotations
 
 import pytest
@@ -55,7 +56,9 @@ async def test_lyrics_provider_generates_deterministic_output_url():
 
 async def test_lyrics_provider_rejects_empty_prompt():
     provider = MockLyricsProvider()
-    empty_request = GenerationRequest(organization_id="org-1", job_id="job-1", capability=Capability.LYRICS, prompt="   ")
+    empty_request = GenerationRequest(
+        organization_id="org-1", job_id="job-1", capability=Capability.LYRICS, prompt="   "
+    )
     with pytest.raises(ProviderError):
         await provider.generate(empty_request)
 
