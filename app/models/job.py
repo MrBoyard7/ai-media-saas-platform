@@ -5,6 +5,8 @@ immediately) and then updated by a Celery worker as the job moves through
 the GPU pipeline. This table is what powers webhook notifications, the
 user dashboard's "My Generations" view and SDK polling.
 """
+from __future__ import annotations
+
 import enum
 import uuid
 

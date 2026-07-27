@@ -1,6 +1,8 @@
 """Credits & Wallet: the single source of truth for how many credits an
 organization has, and a fully auditable, append-only ledger of every
 movement (top-up, generation debit, refund, promotional grant)."""
+from __future__ import annotations
+
 import enum
 import uuid
 from typing import TYPE_CHECKING

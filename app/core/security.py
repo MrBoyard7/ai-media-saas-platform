@@ -6,6 +6,8 @@ This module is only responsible for *verifying* the JWT that Supabase
 issued and turning it into an internal `AuthContext`, and for issuing
 short-lived, scoped API keys for the Developer Platform / SDK.
 """
+from __future__ import annotations
+
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from typing import Any

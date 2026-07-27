@@ -1,4 +1,6 @@
 """Organization = tenant. Every other resource in the platform is scoped to one."""
+from __future__ import annotations
+
 import enum
 from typing import TYPE_CHECKING
 import uuid

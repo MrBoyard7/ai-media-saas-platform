@@ -6,6 +6,8 @@ are data: a `Feature` is a capability key (e.g. `video.generate`,
 plans include it and with what limits. This lets Sales/Product ship a new
 pricing tier or run an A/B experiment without a deploy.
 """
+from __future__ import annotations
+
 import enum
 import uuid
 
