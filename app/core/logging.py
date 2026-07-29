@@ -8,7 +8,6 @@ request id or tenant id attached to a specific log line can pass
 that aren't provided simply don't appear in that line's JSON, rather than
 every line carrying a placeholder value for context it doesn't have.
 """
-
 import logging
 import sys
 
